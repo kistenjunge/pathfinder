@@ -2,7 +2,7 @@ package kistenjunge.org.controller;
 
 import kistenjunge.org.entity.Project;
 
-
+import java.util.ArrayList;
 import java.util.List;
 
 import kistenjunge.org.repository.ProjectRepo;
@@ -16,34 +16,37 @@ import javax.inject.Inject;
 
 @RestController
 @RequestMapping("/api/project")
-public class ProjectRestController {
-  
+public class ProjectRestController
+{
+
   @Inject
   private ProjectRepo repo;
-  
-  @RequestMapping(value="{id}", method=RequestMethod.DELETE)
-  public void delete(@PathVariable Long id) {
+
+  @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+  public void delete(@PathVariable Long id)
+  {
     repo.delete(id);
-    
   }
-  
-  @RequestMapping(method=RequestMethod.POST)
-  public Project create(@RequestBody Project domain) {
+
+  @RequestMapping(method = RequestMethod.POST)
+  public Project create(@RequestBody Project domain)
+  {
     return repo.save(domain);
-    
   }
-  
-  @RequestMapping(value="{id}", method=RequestMethod.PUT)
-  public Project update(@RequestBody Project domain, @PathVariable Long id) {
+
+  @RequestMapping(value = "{id}", method = RequestMethod.PUT)
+  public Project update(@RequestBody Project domain, @PathVariable Long id)
+  {
     Project update = repo.findOne(id);
     //TODO Implement logic to update object from DB
     return repo.save(update);
-    
+
   }
-  
-  @RequestMapping(method=RequestMethod.GET)
-  public List<Project> list() {
-    return (List<Project>)repo.findAll();
-    
+
+  @RequestMapping(method = RequestMethod.GET)
+  public List<Project> list()
+  {
+    return (List<Project>) repo.findAll();
+
   }
 }
