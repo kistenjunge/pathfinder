@@ -4,6 +4,7 @@
 .settings/
 target/
 *.class
+*.bak
 pathfinder.iml
 
 # Package Files #
