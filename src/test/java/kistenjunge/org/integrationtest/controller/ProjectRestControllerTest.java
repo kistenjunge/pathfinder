@@ -1,14 +1,14 @@
-package kistenjunge.org.controller;
+package kistenjunge.org.integrationtest.controller;
 
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 import com.seitenbau.stu.database.manipulate.RemoveTableColumns;
-import com.seitenbau.stu.database.modifier.IDataSetModifier;
 import com.seitenbau.stu.database.rule.DatabaseSetup;
 import com.seitenbau.stu.database.rule.InjectDataSet;
 import kistenjunge.org.App;
 import kistenjunge.org.database.dataset.ITestProjectDataset;
 import kistenjunge.org.entity.Project;
+import kistenjunge.org.integrationtest.ITestBase;
 import kistenjunge.org.repository.ProjectRepo;
 import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;

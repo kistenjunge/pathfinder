@@ -1,4 +1,4 @@
-package kistenjunge.org.controller;
+package kistenjunge.org.integrationtest;
 
 import com.seitenbau.stu.database.extend.impl.MySQLAutoIncrementReset;
 import com.seitenbau.stu.database.rule.DatabaseTesterRule;
