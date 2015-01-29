@@ -24,6 +24,17 @@
   </properties>
 
   <!-- ====================================================================== -->
+  <!-- R E P O S I T O R I E S -->
+  <!-- ====================================================================== -->
+  <repositories>
+    <repository>
+      <id>sb-utils-bintray</id>
+      <name>Seitenbau utils bintrayrepository</name>
+      <url>http://dl.bintray.com/seitenbau/utils</url>
+    </repository>
+  </repositories>
+
+  <!-- ====================================================================== -->
   <!-- D E P E N D E N C I E S -->
   <!-- ====================================================================== -->
   <dependencies> 
@@ -92,6 +103,16 @@
       <version>2.3.2</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>com.seitenbau.stu</groupId>
+      <artifactId>stu-database</artifactId>
+      <version>0.2.0.RC4</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-dbcp</groupId>
+      <artifactId>commons-dbcp</artifactId>
+    </dependency>
   </dependencies>
 
   <!-- ====================================================================== -->
@@ -142,6 +163,25 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>add-test-source</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-test-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>src/test/generated-java/</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <table name="project">
+    <column>id</column>
+    <column>title</column>
+    <column>description</column>
+    <row>
+      <value>20</value>
+      <value>alpha</value>
+      <value><![CDATA[description for alpha]]></value>
+    </row>
+    <row>
+      <value>21</value>
+      <value>beta</value>
+      <null/>
+    </row>
+    <row>
+      <value>22</value>
+      <value>gamma</value>
+      <value><![CDATA[gamme description]]></value>
+    </row>
+  </table>
+</dataset>
