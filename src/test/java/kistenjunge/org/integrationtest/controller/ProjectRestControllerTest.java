@@ -20,9 +20,11 @@ import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+
 import javax.inject.Inject;
 
-import static com.jayway.restassured.RestAssured.*;
+import static com.jayway.restassured.RestAssured.given;
+import static com.jayway.restassured.RestAssured.when;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -42,7 +44,9 @@ public class ProjectRestControllerTest extends ITestBase
   int port;
 
   final Project alpha = new Project("alpha", "description for alpha");
+
   final Project beta = new Project("beta", null);
+
   final String endpoint = "/api/project";
 
   @Before

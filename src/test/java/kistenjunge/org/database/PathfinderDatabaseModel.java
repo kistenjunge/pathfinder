@@ -20,8 +20,8 @@ public class PathfinderDatabaseModel extends DatabaseModel
     // paste/merge generated model here
     Table project = table("project")
         .column("id", DataType.BIGINT)
-          .defaultIdentifier()
-          .setFlag(ColumnMetaData.AUTO_INVOKE_NEXT)
+        .defaultIdentifier()
+        .setFlag(ColumnMetaData.AUTO_INVOKE_NEXT)
         .column("title", DataType.VARCHAR)
         .column("description", DataType.VARCHAR)
         .build();

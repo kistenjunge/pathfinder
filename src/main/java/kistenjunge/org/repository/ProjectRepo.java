@@ -1,7 +1,6 @@
 package kistenjunge.org.repository;
 
 import kistenjunge.org.entity.Project;
-
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

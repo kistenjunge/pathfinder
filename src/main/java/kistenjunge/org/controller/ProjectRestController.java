@@ -1,18 +1,11 @@
 package kistenjunge.org.controller;
 
 import kistenjunge.org.entity.Project;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import kistenjunge.org.repository.ProjectRepo;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/project")

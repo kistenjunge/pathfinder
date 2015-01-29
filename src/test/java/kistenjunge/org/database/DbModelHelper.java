@@ -2,13 +2,10 @@ package kistenjunge.org.database;
 
 import com.seitenbau.stu.config.TestConfiguration;
 import com.seitenbau.stu.database.DatabaseTester;
-import com.seitenbau.stu.database.generator.DataSetGenerator;
-import com.seitenbau.stu.database.generator.Table;
 import com.seitenbau.stu.database.migrate.MigrateFromXml;
 import com.seitenbau.stu.database.modelgenerator.DatabaseModel;
 import com.seitenbau.stu.database.modelgenerator.ModelReader;
 import com.seitenbau.stu.database.modelgenerator.STUModelWriter;
-import com.seitenbau.stu.database.modelgenerator.TableModel;
 import kistenjunge.org.ITestConfiguration;
 
 import java.sql.Connection;
@@ -26,7 +23,8 @@ public class DbModelHelper
     db.dumpDatabase(exportFolder + "/exportetDataset.xml");
 
     // generate dataset
-    MigrateFromXml.processFolders(exportFolder, "kistenjunge.org.database.dataset.EmptyDataset", "src/test/java");
+    MigrateFromXml
+        .processFolders(exportFolder, "kistenjunge.org.database.dataset.EmptyDataset", "src/test/java");
   }
 
   public static void generateDatabaseModelFromDatabase() throws ClassNotFoundException, SQLException
@@ -46,9 +44,9 @@ public class DbModelHelper
 
   public static void main(String[] args) throws Exception
   {
-//    generateDatabaseModelFromDatabase();
+    //    generateDatabaseModelFromDatabase();
 
-//    exportDatabaseToDataset();
+    //    exportDatabaseToDataset();
   }
 
 }
