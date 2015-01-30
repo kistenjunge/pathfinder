@@ -4,6 +4,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Project implements Serializable
@@ -18,6 +20,10 @@ public class Project implements Serializable
 
   @Column(name = "description", nullable = true, length = 500)
   private String description;
+
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+  @JoinColumn(name = "project_id")
+  private Set<Component> components = new HashSet<>();
 
   /**
    * protected no-args ctor

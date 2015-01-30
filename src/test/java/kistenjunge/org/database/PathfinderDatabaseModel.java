@@ -20,11 +20,23 @@ public class PathfinderDatabaseModel extends DatabaseModel
     // paste/merge generated model here
     Table project = table("project")
         .column("id", DataType.BIGINT)
-        .defaultIdentifier()
-        .setFlag(ColumnMetaData.AUTO_INVOKE_NEXT)
+          .defaultIdentifier()
+          .setFlag(ColumnMetaData.AUTO_INVOKE_NEXT)
         .column("title", DataType.VARCHAR)
         .column("description", DataType.VARCHAR)
         .build();
+
+    Table component = table("component")
+        .column("id", DataType.BIGINT) //
+          .defaultIdentifier()
+          .setFlag(ColumnMetaData.AUTO_INVOKE_NEXT)
+        .column("name", DataType.VARCHAR)
+        .column("project_id", DataType.BIGINT) //
+          .reference //
+            .local.multiplicity("1..1") //
+            .foreign(project.ref("id")).multiplicity("0..*") //
+        .build();
+
   }
 
   /**

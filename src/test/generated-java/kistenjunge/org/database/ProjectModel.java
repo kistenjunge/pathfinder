@@ -8,31 +8,25 @@ import com.seitenbau.stu.database.extend.DatasetIdGenerator;
 public class ProjectModel
 {
 
-  /**
-   * actual type : java.lang.Long
-   */
+  /** actual type : java.lang.Long */
   protected java.lang.Object id;
 
-  /**
-   * actual type : java.lang.String
-   */
+  /** actual type : java.lang.String */
   protected java.lang.Object title;
 
-  /**
-   * actual type : java.lang.String
-   */
+  /** actual type : java.lang.String */
   protected java.lang.Object description;
 
   DatasetIdGenerator _generator;
 
-  public void setIdGenerator(DatasetIdGenerator generator)
+  public void setIdGenerator(DatasetIdGenerator generator) 
   {
-    _generator = generator;
+    _generator=generator;
   }
 
   public ProjectModel setId(Integer intValue)
   {
-    this.id = (intValue == null ? null : Long.valueOf(intValue));
+    this.id = (intValue==null?null:Long.valueOf(intValue));
     return this;
   }
 
@@ -44,13 +38,13 @@ public class ProjectModel
 
   public ProjectModel setIdRaw(Object value)
   {
-    this.id = value;
+    this.id =  value;
     return this;
   }
 
   public java.lang.Long getId()
   {
-    return (java.lang.Long) id;
+    return (java.lang.Long)  id;
   }
 
   public java.lang.Object getIdRaw()
@@ -60,7 +54,7 @@ public class ProjectModel
 
   public ProjectModel nextId()
   {
-    Long nextId = _generator.nextId("project", "id");
+    Long nextId = _generator.nextId("project","id");
     setId(nextId);
     return this;
   }
@@ -73,13 +67,13 @@ public class ProjectModel
 
   public ProjectModel setTitleRaw(Object value)
   {
-    this.title = value;
+    this.title =  value;
     return this;
   }
 
   public java.lang.String getTitle()
   {
-    return (java.lang.String) title;
+    return (java.lang.String)  title;
   }
 
   public java.lang.Object getTitleRaw()
@@ -95,18 +89,18 @@ public class ProjectModel
 
   public ProjectModel setDescriptionRaw(Object value)
   {
-    this.description = value;
+    this.description =  value;
     return this;
   }
 
   public java.lang.String getDescription()
   {
-    return (java.lang.String) description;
+    return (java.lang.String)  description;
   }
 
   public java.lang.Object getDescriptionRaw()
   {
     return description;
   }
-
+ 
 }

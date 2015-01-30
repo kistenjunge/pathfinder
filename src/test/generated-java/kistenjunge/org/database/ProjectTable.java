@@ -1,5 +1,22 @@
 package kistenjunge.org.database;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.HashMap;
+
+import org.dbunit.dataset.ITable;
+import org.dbunit.dataset.Column;
+import org.dbunit.dataset.ITableMetaData;
+import org.dbunit.dataset.DefaultTableMetaData;
+import org.dbunit.dataset.RowOutOfBoundsException;
+import org.dbunit.dataset.DataSetException;
+import org.dbunit.dataset.datatype.DataType;
+
 import com.google.common.base.Optional;
 import com.seitenbau.stu.database.dsl.CastUtil;
 import com.seitenbau.stu.database.dsl.DataSetIdentificator;
@@ -10,14 +27,10 @@ import com.seitenbau.stu.database.generator.ColumnMetaData;
 import com.seitenbau.stu.database.generator.ColumnMetaDataBuilder;
 import com.seitenbau.stu.database.util.NullCompatibleEquivalence;
 import com.seitenbau.stu.util.Action;
-import com.seitenbau.stu.util.DateUtil;
 import com.seitenbau.stu.util.Filter;
 import com.seitenbau.stu.util.Future;
+import com.seitenbau.stu.util.DateUtil;
 import com.seitenbau.stu.util.date.DateBuilder;
-import org.dbunit.dataset.*;
-import org.dbunit.dataset.datatype.DataType;
-
-import java.util.*;
 
 
 /* *******************************************************
@@ -26,13 +39,18 @@ import java.util.*;
 
 /**
  * The project table
- * <p/>
- * <p/>
+ * <p>
+ * <p>
  * Use {@link ProjectTable#insertRow()} to model tables with the plain Java builder API.
- * <p/>
+ * <p>
  * To search for rows, use {@link ProjectTable#findWhere}, {@link ProjectTable#getWhere}
  * or {@link ProjectTable#find}.
- * <p/>
+ * <p>
+ * The table is referenced by these tables:
+ * <ul>
+ *   <li>{@link ComponentTable}</li>
+ * </ul>
+ * <p>
  * See {@link PathfinderDatabaseDataSet} for an overview over all tables.
  */
 public class ProjectTable implements ITable
@@ -42,9 +60,7 @@ public class ProjectTable implements ITable
   public static class Columns
   {
     public static final String Id = "id";
-
     public static final String Title = "title";
-
     public static final String Description = "description";
   }
 
@@ -90,11 +106,11 @@ public class ProjectTable implements ITable
   // @formatter:on
 
   ITableMetaData _metaData;
-
+  
   PathfinderDatabaseDataSet _dataSet;
-
+  
   Iterator<RowBuilder_Project> _iterator;
-
+  
   public ProjectTable()
   {
     _metaData = new DefaultTableMetaData(NAME, COLUMNS);
@@ -104,35 +120,26 @@ public class ProjectTable implements ITable
   {
     _dataSet = dataSet;
   }
-
+  
   public PathfinderDatabaseDataSet getDataset()
   {
     return _dataSet;
   }
 
   public List<RowBuilder_Project> rows = new ArrayList<RowBuilder_Project>();
-
+  
   @SuppressWarnings("rawtypes")
   public interface RowSetters_Project<T extends RowSetters_Project>
   {
     T setId(Integer intValue);
-
     T setId(java.lang.Long value);
-
     T setIdRaw(Object value);
-
     T nextId();
-
     T setTitle(Future<Object> value);
-
     T setTitle(java.lang.String value);
-
     T setTitleRaw(Object value);
-
     T setDescription(Future<Object> value);
-
     T setDescription(java.lang.String value);
-
     T setDescriptionRaw(Object value);
   }
 
@@ -140,26 +147,24 @@ public class ProjectTable implements ITable
   public interface RowGetters_Project<T extends RowGetters_Project>
   {
     java.lang.Long getId();
-
     java.lang.String getTitle();
-
     java.lang.String getDescription();
 
   }
 
   public static class RowBuilder_Project implements
-      RowSetters_Project<RowBuilder_Project>, RowGetters_Project<RowBuilder_Project>
+    RowSetters_Project<RowBuilder_Project>, RowGetters_Project<RowBuilder_Project>
   {
 
     Object[] data;
-
+    
     Boolean[] mutable;
-
+        
     ProjectTable table;
-
+    
     ProjectRef ref;
-
-    RowBuilder_Project(ProjectTable tableDelegate)
+    
+    RowBuilder_Project(ProjectTable tableDelegate) 
     {
       data = new Object[COLUMNS.length];
       mutable = new Boolean[COLUMNS.length];
@@ -172,7 +177,6 @@ public class ProjectTable implements ITable
 
     /**
      * Binds the row with the reference in this scope
-     *
      * @param ref The reference, which shall be bound to the row builder
      * @return The row builder
      */
@@ -182,7 +186,7 @@ public class ProjectTable implements ITable
       ref.setBuilder(table._dataSet, this);
       return this;
     }
-
+    
     public ProjectRef getRef()
     {
       return ref;
@@ -192,21 +196,16 @@ public class ProjectTable implements ITable
     {
       if (value instanceof DatabaseRef)
       {
-        throw new RuntimeException(
-            "Column " + columnName + " can not contain a Ref type (class: " + value.getClass().getName()
-                + ")");
+        throw new RuntimeException("Column " + columnName + " can not contain a Ref type (class: " + value.getClass().getName() + ")");
       }
     }
-
+    
     void assertNoOrCorrectRefType(String columnName, Class<?> clazz, Object value)
     {
       if (value instanceof DatabaseRef)
       {
-        if (!clazz.isInstance(value))
-        {
-          throw new RuntimeException(
-              "Column " + columnName + " id can not contain the Ref type (class: " + value.getClass()
-                  .getName() + ")");
+        if (!clazz.isInstance(value)) {
+          throw new RuntimeException("Column " + columnName + " id can not contain the Ref type (class: " + value.getClass().getName() + ")");
         }
       }
     }
@@ -220,15 +219,13 @@ public class ProjectTable implements ITable
     {
       return setIdRaw(value);
     }
-
+    
     public RowBuilder_Project setIdRaw(Object value)
     {
       assertNoRefType("Id", value);
       if (!mutable[0] && NullCompatibleEquivalence.equals(data[0], value))
       {
-        throw new RuntimeException(
-            "Value id is immutable an cannot be changed (new value: " + value + ", old value: " + data[0]
-                + ").");
+        throw new RuntimeException("Value id is immutable an cannot be changed (new value: " + value + ", old value: " + data[0] + ").");
       }
       mutable[0] = false;
       data[0] = value;
@@ -238,7 +235,7 @@ public class ProjectTable implements ITable
     public RowBuilder_Project nextId()
     {
       DatasetIdGenerator generator = table.getDataset().getIdGenerator();
-      Long nextId = generator.nextId(ProjectTable.NAME, "id");
+      Long nextId = generator.nextId(ProjectTable.NAME,"id");
       setId(nextId);
       return this;
     }
@@ -254,7 +251,7 @@ public class ProjectTable implements ITable
     public java.lang.Long getId()
     {
       Object value = data[0];
-      return (java.lang.Long) value;
+      return (java.lang.Long)value;
     }
 
     // use description() in the table model to add a column description
@@ -272,7 +269,7 @@ public class ProjectTable implements ITable
     {
       return setTitleRaw(value);
     }
-
+    
     public RowBuilder_Project setTitleRaw(Object value)
     {
       assertNoRefType("Title", value);
@@ -288,13 +285,13 @@ public class ProjectTable implements ITable
       {
         DataSetIdentificator last = DataSetRegistry.use(table._dataSet);
         @SuppressWarnings("unchecked")
-        Future<Object> futureValue = (Future<Object>) value;
-        java.lang.String result = (java.lang.String) CastUtil.cast(futureValue.getFuture(),
-            com.seitenbau.stu.database.generator.DataType.VARCHAR);
+        Future<Object> futureValue = (Future<Object>)value;
+        java.lang.String result = (java.lang.String)CastUtil.cast(futureValue.getFuture(), 
+          com.seitenbau.stu.database.generator.DataType.VARCHAR);
         DataSetRegistry.use(last);
         return result;
       }
-      return (java.lang.String) value;
+      return (java.lang.String)value;
     }
 
     // use description() in the table model to add a column description
@@ -312,7 +309,7 @@ public class ProjectTable implements ITable
     {
       return setDescriptionRaw(value);
     }
-
+    
     public RowBuilder_Project setDescriptionRaw(Object value)
     {
       assertNoRefType("Description", value);
@@ -328,13 +325,13 @@ public class ProjectTable implements ITable
       {
         DataSetIdentificator last = DataSetRegistry.use(table._dataSet);
         @SuppressWarnings("unchecked")
-        Future<Object> futureValue = (Future<Object>) value;
-        java.lang.String result = (java.lang.String) CastUtil.cast(futureValue.getFuture(),
-            com.seitenbau.stu.database.generator.DataType.VARCHAR);
+        Future<Object> futureValue = (Future<Object>)value;
+        java.lang.String result = (java.lang.String)CastUtil.cast(futureValue.getFuture(), 
+          com.seitenbau.stu.database.generator.DataType.VARCHAR);
         DataSetRegistry.use(last);
         return result;
       }
-      return (java.lang.String) value;
+      return (java.lang.String)value;
     }
 
     // use description() in the table model to add a column description
@@ -401,32 +398,31 @@ public class ProjectTable implements ITable
     {
       return table.insertRow(theRow);
     }
-
+    
     /**
      * Gets the value of a specified column.
-     * <p/>
+     * <p>
      * Throws a RuntimeException, if row count is not equal to 1.
-     *
      * @param column The column name (not case sensitive)
      * @return The value
      */
-    public Object getValue(String column) throws RuntimeException
+    public Object getValue(String column) throws RuntimeException 
     {
-      if (column.equalsIgnoreCase(Columns.Id))
+      if(column.equalsIgnoreCase(Columns.Id) )
       {
         return getColumnValue(0);
       }
-      if (column.equalsIgnoreCase(Columns.Title))
+      if(column.equalsIgnoreCase(Columns.Title) )
       {
         return getColumnValue(1);
       }
-      if (column.equalsIgnoreCase(Columns.Description))
+      if(column.equalsIgnoreCase(Columns.Description) )
       {
         return getColumnValue(2);
       }
       throw new RuntimeException(NAME + " col = " + column);
     }
-
+    
     // considered private, but possibly unused
     Object getColumnValue(int index)
     {
@@ -435,14 +431,14 @@ public class ProjectTable implements ITable
       {
         DataSetIdentificator last = DataSetRegistry.use(table._dataSet);
         @SuppressWarnings("unchecked")
-        Future<Object> futureValue = (Future<Object>) value;
+        Future<Object> futureValue = (Future<Object>)value;
         Object result = futureValue.getFuture();
         DataSetRegistry.use(last);
         return result;
-      }
+      } 
       return value;
     }
-
+    
     @Override
     public RowBuilder_Project clone()
     {
@@ -453,10 +449,9 @@ public class ProjectTable implements ITable
       return clone;
     }
   }
-
+ 
   /**
    * Delivers a collection of rows matching to a filter.
-   *
    * @param filter The used filter
    * @return The collection of rows, may return an empty list
    * @see #findWhere
@@ -484,7 +479,7 @@ public class ProjectTable implements ITable
       action.call(row);
     }
   }
-
+  
   public List<RowBuilder_Project> getRows()
   {
     return Collections.unmodifiableList(rows);
@@ -494,9 +489,8 @@ public class ProjectTable implements ITable
    * Allows searching for one or more rows specified by a column value.
    * findWhere assumes that it is used to search for existing rows. An
    * exception will be thrown if no matching row was found. Use {@link
-   * #quietFindWhere}, {@link # getWhere} or
+   * #quietFindWhere}, {@link # getWhere} or 
    * #find to avoid this behavior.
-   *
    * @see #getWhere
    * @see #quietFindWhere
    * @see #find(Filter)
@@ -506,7 +500,6 @@ public class ProjectTable implements ITable
   /**
    * Allows searching for one or more rows specified by a column value.
    * quietFindWhere will not throw an exception if no row was found.
-   *
    * @see #getWhere
    * @see #findWhere
    * @see #find(Filter)
@@ -516,32 +509,29 @@ public class ProjectTable implements ITable
   public static class ProjectFindWhere
   {
     private final List<RowBuilder_Project> rows;
-
     private final ProjectTable table;
-
     private final boolean useNotEmptyAssertions;
-
+    
     public ProjectFindWhere(ProjectTable theTable, boolean useNotEmptyAssertions)
     {
-      table = theTable;
-      rows = theTable.rows;
-      this.useNotEmptyAssertions = useNotEmptyAssertions;
+       table = theTable;
+       rows = theTable.rows;
+       this.useNotEmptyAssertions = useNotEmptyAssertions;
     }
 
-    public ProjectFindWhere(ProjectTable theTable, List<RowBuilder_Project> rows,
-        boolean useNotEmptyAssertions)
+    public ProjectFindWhere(ProjectTable theTable, List<RowBuilder_Project> rows, boolean useNotEmptyAssertions)
     {
-      table = theTable;
-      this.rows = rows;
-      this.useNotEmptyAssertions = useNotEmptyAssertions;
+       table = theTable;
+       this.rows = rows;
+       this.useNotEmptyAssertions = useNotEmptyAssertions;
     }
-
-    public RowCollection_Project rowComparesTo(Comparable<RowBuilder_Project> toSearch)
+    
+    public RowCollection_Project rowComparesTo(Comparable<RowBuilder_Project> toSearch) 
     {
       RowCollection_Project modifiers = new RowCollection_Project(table, useNotEmptyAssertions);
-      for (RowBuilder_Project row : rows)
+      for (RowBuilder_Project row : rows) 
       {
-        if (toSearch.compareTo(row) == 0)
+        if (toSearch.compareTo(row) == 0) 
         {
           modifiers.add(row);
         }
@@ -568,12 +558,12 @@ public class ProjectTable implements ITable
       return id(row.getId());
     }
 
-    public RowCollection_Project id(java.lang.Long toSearch)
+    public RowCollection_Project id(java.lang.Long toSearch) 
     {
       RowCollection_Project modifiers = new RowCollection_Project(table, useNotEmptyAssertions);
-      for (RowBuilder_Project row : rows)
+      for (RowBuilder_Project row : rows) 
       {
-        if (toSearch.equals(row.getId()))
+        if (toSearch.equals(row.getId())) 
         {
           modifiers.add(row);
         }
@@ -582,9 +572,9 @@ public class ProjectTable implements ITable
       return modifiers;
     }
 
-    public RowCollection_Project id(Integer toSearch)
+    public RowCollection_Project id(Integer toSearch) 
     {
-      return id(Long.valueOf(toSearch));
+      return id( Long.valueOf(toSearch) );
     }
 
     public RowCollection_Project title(ProjectRef ref)
@@ -605,12 +595,12 @@ public class ProjectTable implements ITable
       return title(row.getTitle());
     }
 
-    public RowCollection_Project title(java.lang.String toSearch)
+    public RowCollection_Project title(java.lang.String toSearch) 
     {
       RowCollection_Project modifiers = new RowCollection_Project(table, useNotEmptyAssertions);
-      for (RowBuilder_Project row : rows)
+      for (RowBuilder_Project row : rows) 
       {
-        if (toSearch.equals(row.getTitle()))
+        if (toSearch.equals(row.getTitle())) 
         {
           modifiers.add(row);
         }
@@ -637,12 +627,12 @@ public class ProjectTable implements ITable
       return description(row.getDescription());
     }
 
-    public RowCollection_Project description(java.lang.String toSearch)
+    public RowCollection_Project description(java.lang.String toSearch) 
     {
       RowCollection_Project modifiers = new RowCollection_Project(table, useNotEmptyAssertions);
-      for (RowBuilder_Project row : rows)
+      for (RowBuilder_Project row : rows) 
       {
-        if (toSearch.equals(row.getDescription()))
+        if (toSearch.equals(row.getDescription())) 
         {
           modifiers.add(row);
         }
@@ -653,18 +643,17 @@ public class ProjectTable implements ITable
 
     private void assertModifiersNotEmpty(RowCollection_Project modifiers, String columnName, Object toSearch)
     {
-      if (useNotEmptyAssertions && modifiers.isEmpty())
+      if (useNotEmptyAssertions && modifiers.isEmpty()) 
       {
         throw new RuntimeException("No Row with " + columnName + " = " + toSearch);
       }
-    }
+    }    
   }
 
   /**
    * Allows searching for a row specified by a column value.
    * The first matching row is returned. Does not throw an
    * exception, if no element is found.
-   *
    * @see #findWhere
    * @see #find(Filter)
    */
@@ -673,27 +662,25 @@ public class ProjectTable implements ITable
   public static class ProjectGetWhere
   {
     private final List<RowBuilder_Project> rows;
-
     private final ProjectTable table;
-
-    public ProjectGetWhere(ProjectTable theTable)
+    
+    public ProjectGetWhere(ProjectTable theTable) 
     {
-      table = theTable;
-      rows = theTable.rows;
+       table = theTable;
+       rows = theTable.rows;
     }
-
-    public Optional<RowBuilder_Project> rowComparesTo(Comparable<RowBuilder_Project> toSearch)
+    
+    public Optional<RowBuilder_Project> rowComparesTo(Comparable<RowBuilder_Project> toSearch) 
     {
-      Optional<RowBuilder_Project> result = Optional.<RowBuilder_Project>absent();
-      for (RowBuilder_Project row : rows)
+      Optional<RowBuilder_Project> result = Optional.<RowBuilder_Project> absent();
+      for (RowBuilder_Project row : rows) 
       {
-        if (toSearch.compareTo(row) == 0)
+        if (toSearch.compareTo(row) == 0) 
         {
-          if (result.isPresent())
-          {
+          if (result.isPresent()) {
             throw new RuntimeException("Multiple hits in getWhere query");
           }
-
+          
           result = Optional.of(row);
         }
       }
@@ -718,26 +705,25 @@ public class ProjectTable implements ITable
       return id(row.getId());
     }
 
-    public Optional<RowBuilder_Project> id(java.lang.Long toSearch)
+    public Optional<RowBuilder_Project> id(java.lang.Long toSearch) 
     {
-      Optional<RowBuilder_Project> result = Optional.<RowBuilder_Project>absent();
-      for (RowBuilder_Project row : rows)
+      Optional<RowBuilder_Project> result = Optional.<RowBuilder_Project> absent();
+      for (RowBuilder_Project row : rows) 
       {
-        if (toSearch.equals(row.getId()))
+        if (toSearch.equals(row.getId())) 
         {
-          if (result.isPresent())
-          {
+          if (result.isPresent()) {
             throw new RuntimeException("Multiple hits in getWhere for column id = " + toSearch);
           }
           result = Optional.of(row);
-        }
+        }      
       }
       return result;
     }
-
-    public Optional<RowBuilder_Project> id(Integer toSearch)
+    
+    public Optional<RowBuilder_Project> id(Integer toSearch) 
     {
-      return id(Long.valueOf(toSearch));
+      return id( Long.valueOf(toSearch) );
     }
 
     public Optional<RowBuilder_Project> title(ProjectRef ref)
@@ -758,19 +744,18 @@ public class ProjectTable implements ITable
       return title(row.getTitle());
     }
 
-    public Optional<RowBuilder_Project> title(java.lang.String toSearch)
+    public Optional<RowBuilder_Project> title(java.lang.String toSearch) 
     {
-      Optional<RowBuilder_Project> result = Optional.<RowBuilder_Project>absent();
-      for (RowBuilder_Project row : rows)
+      Optional<RowBuilder_Project> result = Optional.<RowBuilder_Project> absent();
+      for (RowBuilder_Project row : rows) 
       {
-        if (toSearch.equals(row.getTitle()))
+        if (toSearch.equals(row.getTitle())) 
         {
-          if (result.isPresent())
-          {
+          if (result.isPresent()) {
             throw new RuntimeException("Multiple hits in getWhere for column title = " + toSearch);
           }
           result = Optional.of(row);
-        }
+        }      
       }
       return result;
     }
@@ -793,68 +778,65 @@ public class ProjectTable implements ITable
       return description(row.getDescription());
     }
 
-    public Optional<RowBuilder_Project> description(java.lang.String toSearch)
+    public Optional<RowBuilder_Project> description(java.lang.String toSearch) 
     {
-      Optional<RowBuilder_Project> result = Optional.<RowBuilder_Project>absent();
-      for (RowBuilder_Project row : rows)
+      Optional<RowBuilder_Project> result = Optional.<RowBuilder_Project> absent();
+      for (RowBuilder_Project row : rows) 
       {
-        if (toSearch.equals(row.getDescription()))
+        if (toSearch.equals(row.getDescription())) 
         {
-          if (result.isPresent())
-          {
+          if (result.isPresent()) {
             throw new RuntimeException("Multiple hits in getWhere for column description = " + toSearch);
           }
           result = Optional.of(row);
-        }
+        }      
       }
       return result;
     }
   }
-
-  /**
-   * Inner class! Use RowCollection_Project in your code !
-   */
-  public static class RowModify_Project extends RowBuilder_Project
+  
+  /** Inner class! Use RowCollection_Project in your code ! */
+  public static class RowModify_Project extends RowBuilder_Project 
   {
-
+    
     List<RowBuilder_Project> _rows;
-
+    
     boolean _useNotEmptyAssertions;
 
-    public RowModify_Project(ProjectTable theTable, boolean useNotEmptyAssertions)
+    public RowModify_Project(ProjectTable theTable, boolean useNotEmptyAssertions) 
     {
       super(theTable);
       _useNotEmptyAssertions = useNotEmptyAssertions;
       _rows = new ArrayList<RowBuilder_Project>();
     }
-
-    public void add(RowBuilder_Project row)
+      
+    public void add(RowBuilder_Project row) 
     {
       _rows.add(row);
     }
-
+    
     public List<RowBuilder_Project> getRows()
     {
       return Collections.unmodifiableList(_rows);
     }
-
-    public boolean isEmpty()
+      
+    public boolean isEmpty() 
     {
       return _rows.isEmpty();
     }
 
     public RowModify_Project delete()
     {
-      for (RowBuilder_Project row : _rows)
+      for(RowBuilder_Project row : _rows) 
       {
         table.rows.remove(row);
       }
       return this;
     }
-
+      
     public RowModify_Project setId(Integer intValue)
     {
-      for (RowBuilder_Project row : _rows)
+      for(RowBuilder_Project row : _rows) 
       {
         row.setId(intValue);
       }
@@ -863,84 +845,83 @@ public class ProjectTable implements ITable
 
     public RowModify_Project setId(java.lang.Long value)
     {
-      for (RowBuilder_Project row : _rows)
+      for(RowBuilder_Project row : _rows) 
       {
         row.setId(value);
       }
       return this;
     }
-
+      
     public RowModify_Project setIdRaw(Object value)
     {
-      for (RowBuilder_Project row : _rows)
+      for(RowBuilder_Project row : _rows)
       {
         row.setIdRaw(value);
       }
       return this;
     }
-
+    
     // use description() in the table model to add a column description
     public java.lang.Long getId()
     {
-      assertSingleResult();
+      assertSingleResult(); 
       return _rows.get(0).getId();
     }
 
     public RowModify_Project setTitle(java.lang.String value)
     {
-      for (RowBuilder_Project row : _rows)
+      for(RowBuilder_Project row : _rows) 
       {
         row.setTitle(value);
       }
       return this;
     }
-
+      
     public RowModify_Project setTitleRaw(Object value)
     {
-      for (RowBuilder_Project row : _rows)
+      for(RowBuilder_Project row : _rows)
       {
         row.setTitleRaw(value);
       }
       return this;
     }
-
+    
     // use description() in the table model to add a column description
     public java.lang.String getTitle()
     {
-      assertSingleResult();
+      assertSingleResult(); 
       return _rows.get(0).getTitle();
     }
 
     public RowModify_Project setDescription(java.lang.String value)
     {
-      for (RowBuilder_Project row : _rows)
+      for(RowBuilder_Project row : _rows) 
       {
         row.setDescription(value);
       }
       return this;
     }
-
+      
     public RowModify_Project setDescriptionRaw(Object value)
     {
-      for (RowBuilder_Project row : _rows)
+      for(RowBuilder_Project row : _rows)
       {
         row.setDescriptionRaw(value);
       }
       return this;
     }
-
+    
     // use description() in the table model to add a column description
     public java.lang.String getDescription()
     {
-      assertSingleResult();
+      assertSingleResult(); 
       return _rows.get(0).getDescription();
     }
 
     /**
      * Gets the value of a specified column.
-     * <p/>
+     * <p>
      * Throws a RuntimeException, if row count is not equal to 1.
-     *
      * @param column The column name (not case sensitive)
      * @return The value
      */
@@ -949,28 +930,28 @@ public class ProjectTable implements ITable
       assertSingleResult();
       return _rows.get(0).getValue(column);
     }
-
+    
     private void assertSingleResult()
     {
-      if (_rows.size() != 1)
+      if (_rows.size() != 1) 
       {
         throw new RuntimeException("There where multiple Row in the result! " + _rows.size());
       }
-    }
-
-    /**
+    }    
+      
+    /** 
      * Return the count of rows contained in this collection
      */
     public int getRowCount()
     {
       return _rows.size();
     }
-
+      
     @Override
     public RowModify_Project clone()
     {
       RowModify_Project clone = new RowModify_Project(table, _useNotEmptyAssertions);
-      for (RowBuilder_Project row : _rows)
+      for(RowBuilder_Project row:_rows) 
       {
         clone._rows.add(row.clone());
       }
@@ -978,22 +959,22 @@ public class ProjectTable implements ITable
     }
 
   }
-
-  public static class RowCollection_Project extends RowModify_Project
+  
+  public static class RowCollection_Project extends RowModify_Project 
   {
-
+    
     public final ProjectFindWhere where;
-
-    public RowCollection_Project(ProjectTable theTable, boolean useNotEmptyAssertions)
+    
+    public RowCollection_Project(ProjectTable theTable, boolean useNotEmptyAssertions) 
     {
       super(theTable, useNotEmptyAssertions);
       where = new ProjectFindWhere(table, _rows, useNotEmptyAssertions);
     }
-
+    
   }
 
   /**
-   * Clears the table. Simply removes all rows from the table. Does not any magic.
+   * Clears the table. Simply removes all rows from the table. Does not any magic. 
    */
   public void clear()
   {
@@ -1021,72 +1002,72 @@ public class ProjectTable implements ITable
   }
 
   /**
-   * <code><pre>
-   * ds.table_Project.insertRow()
-   * </pre></code>
-   */
+  * <code><pre>
+  * ds.table_Project.insertRow()
+  * </pre></code>
+  */
   public RowBuilder_Project insertRow(ProjectModel rowToAdd)
   {
     RowBuilder_Project row = new RowBuilder_Project(this);
-    row.setIdRaw(rowToAdd.getIdRaw());
-    row.setTitleRaw(rowToAdd.getTitleRaw());
-    row.setDescriptionRaw(rowToAdd.getDescriptionRaw());
+    row.setIdRaw( rowToAdd.getIdRaw() );
+    row.setTitleRaw( rowToAdd.getTitleRaw() );
+    row.setDescriptionRaw( rowToAdd.getDescriptionRaw() );
     rows.add(row);
     return row;
   }
 
   /**
-   * <code><pre>
-   * ds.table_Project.insertRow(data);
-   * </pre></code>
-   */
+  * <code><pre>
+  * ds.table_Project.insertRow(data);
+  * </pre></code>
+  */
   public RowBuilder_Project insertRow(RowBuilder_Project theRow)
   {
     rows.add(theRow);
     return theRow;
   }
-
+  
   /**
-   * <code><pre>
-   * ds.table_Project.insertRows(data);
-   * </pre></code>
-   */
-  public void insertRows(RowBuilder_Project... theRows)
+  * <code><pre>
+  * ds.table_Project.insertRows(data);
+  * </pre></code>
+  */
+  public void insertRows(RowBuilder_Project...theRows)
   {
     rows.addAll(Arrays.asList(theRows));
   }
-
+  
   /**
-   * Insert new row at the given index
-   * <code><pre>
-   * ds.table_Project.insertRowAt(3)
-   *   ;
-   * </pre></code>
-   */
+  * Insert new row at the given index
+  * <code><pre>
+  * ds.table_Project.insertRowAt(3)
+  *   ;
+  * </pre></code>
+  */
   public RowBuilder_Project insertRowAt(int index)
   {
     RowBuilder_Project row = new RowBuilder_Project(this);
     rows.add(index, row);
     return row;
   }
-
+  
   /**
-   * Insert new row Object at the given index
-   * <code><pre>
-   * ds.table_Project.insertRowAt(3)
-   * </pre></code>
-   */
-  public RowBuilder_Project insertRowAt(int index, RowBuilder_Project theRow)
+  * Insert new row Object at the given index
+  * <code><pre>
+  * ds.table_Project.insertRowAt(3)
+  * </pre></code>
+  */
+  public RowBuilder_Project insertRowAt(int index,RowBuilder_Project theRow)
   {
     rows.add(index, theRow);
     return theRow;
   }
-
+  
   /**
    * Remove a row from the builder by the given index.
    *
    * @return the deleted row
-   */
+   */ 
   public RowBuilder_Project deleteRow(int index)
   {
     RowBuilder_Project rowBuilder = rows.get(index);
@@ -1096,7 +1077,7 @@ public class ProjectTable implements ITable
 
   /**
    * Remove a row from the data set
-   */
+   */ 
   public RowBuilder_Project deleteRow(ProjectRef ref)
   {
     return deleteRow(ref.getBuilder(_dataSet));
@@ -1104,7 +1085,7 @@ public class ProjectTable implements ITable
 
   /**
    * Remove a row from the data set
-   */
+   */ 
   public RowBuilder_Project deleteRow(RowBuilder_Project rowToDelete)
   {
     rows.remove(rowToDelete);
@@ -1112,53 +1093,52 @@ public class ProjectTable implements ITable
   }
 
   /**
-   * Creates a new row but does not add it to the table
-   */
+  * Creates a new row but does not add it to the table
+  */
   public RowBuilder_Project newRow()
   {
     RowBuilder_Project row = new RowBuilder_Project(this);
     return row;
   }
-
+  
   /**
-   * Returns the next Object. The internal iterator is started at
-   * the first call.
-   */
+  * Returns the next Object. The internal iterator is started at 
+  * the first call.
+  */
   public RowBuilder_Project next()
   {
-    if (_iterator == null)
+    if(_iterator == null) 
     {
       _iterator = rows.iterator();
     }
     return _iterator.next();
   }
-
-  public void resetIterator()
+  
+  public void resetIterator() 
   {
     _iterator = null;
   }
 
-  public ITableMetaData getTableMetaData()
+  public ITableMetaData getTableMetaData() 
   {
     return _metaData;
   }
-
-  public int getRowCount()
+  
+  public int getRowCount() 
   {
     return rows.size();
   }
-
+   
   /**
    * Gets the value of a specified table cell.
-   * <p/>
-   *
-   * @param row    The table row
+   * <p>
+   * @param row The table row
    * @param column The column name (not case sensitive)
    * @return The value
    */
-  public Object getValue(int row, String column) throws DataSetException
+  public Object getValue(int row, String column) throws DataSetException 
   {
-    if (row >= rows.size() || row < 0)
+    if (row >= rows.size() || row < 0) 
     {
       throw new RowOutOfBoundsException();
     }
@@ -1169,10 +1149,10 @@ public class ProjectTable implements ITable
   {
     return DateUtil.asDate(dateString);
   }
-
+  
   static Date toDate(DateBuilder date)
   {
-    if (date == null)
+    if(date == null)
     {
       return null;
     }

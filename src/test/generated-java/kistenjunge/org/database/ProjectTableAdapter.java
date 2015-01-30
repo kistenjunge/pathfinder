@@ -1,36 +1,50 @@
 package kistenjunge.org.database;
 
 import com.google.common.base.Optional;
-import com.seitenbau.stu.database.dsl.*;
+
+import com.seitenbau.stu.database.dsl.CastUtil;
+import com.seitenbau.stu.database.dsl.ColumnBinding;
+import com.seitenbau.stu.database.dsl.DatabaseRef;
+import com.seitenbau.stu.database.dsl.NoValue;
+import com.seitenbau.stu.database.dsl.RefColumnBinding;
+import com.seitenbau.stu.database.dsl.TableParser;
+import com.seitenbau.stu.database.dsl.TableParserAdapter;
 import com.seitenbau.stu.database.generator.ColumnMetaData;
 import com.seitenbau.stu.database.generator.DataType;
 import com.seitenbau.stu.database.modifier.IDataSetModifier;
 import com.seitenbau.stu.util.Action;
 import com.seitenbau.stu.util.Filter;
 import com.seitenbau.stu.util.Future;
+
 import groovy.lang.Closure;
-import kistenjunge.org.database.ProjectTable.ProjectFindWhere;
-import kistenjunge.org.database.ProjectTable.ProjectGetWhere;
-import kistenjunge.org.database.ProjectTable.RowBuilder_Project;
-import kistenjunge.org.database.ProjectTable.RowCollection_Project;
 
 import java.util.List;
 
+import kistenjunge.org.database.ProjectTable.RowBuilder_Project;
+import kistenjunge.org.database.ProjectTable.RowCollection_Project;
+import kistenjunge.org.database.ProjectTable.ProjectFindWhere;
+import kistenjunge.org.database.ProjectTable.ProjectGetWhere;
+
+
 /**
  * The project table
- * <p/>
+ * <p>
  * To define test data, overwrite the method {@link PathfinderDatabaseBuilder#tables()} or
  * dynamically call the method {@link ProjectTableAdapter#rows(Closure)}.
- * <p/>
+ * <p>
  * Use {@link ProjectTableAdapter#insertRow()} to model tables with the plain Java builder API.
- * <p/>
+ * <p>
  * To search for rows, use {@link ProjectTableAdapter#findWhere}, {@link ProjectTableAdapter#getWhere}
  * or {@link ProjectTableAdapter#find}.
- * <p/>
+ * <p>
+ * The table is referenced by these tables:
+ * <ul>
+ *   <li>ComponentTable - {@link ComponentTableAdapter}</li>
+ * </ul>
+ * <p>
  * See {@link PathfinderDatabaseBuilder} for an overview over all tables.
  */
-public class ProjectTableAdapter
-{
+public class ProjectTableAdapter {
 
   /**
    * Do not set a value. (To remove a value use {@code null})
@@ -39,39 +53,41 @@ public class ProjectTableAdapter
 
   /**
    * Column Header for Project table.
-   * <p/>
-   * Binds a {@link ProjectRef} with the current row. To create a Ref, use the {@link RefFactory}.
-   * <p/>
+   * <p>
+   * Binds a {@link ProjectRef} with the current row. To create a Ref, use the {@link RefFactory}. 
+   * <p>
    * Data Type: ProjectRef
-   * <p/>
+   * <p>
    */
-  public final ColumnBinding<RowBuilder_Project, ProjectGetWhere> REF =
-      new RefColumnBinding<RowBuilder_Project, ProjectGetWhere>();
+  public final ColumnBinding<RowBuilder_Project, ProjectGetWhere> REF = new RefColumnBinding<RowBuilder_Project, ProjectGetWhere>();
 
   /**
    * Column Header for Project table.
-   * <p/>
+   * <p>
    * Data Type: {@code java.lang.Long}
-   * <br>
+   * <br>   
    * Database Type: DataType.BIGINT
+   * 
    */
   public final ColumnBinding<RowBuilder_Project, ProjectGetWhere> id = createIdBinding();
 
   /**
    * Column Header for Project table.
-   * <p/>
+   * <p>
    * Data Type: {@code java.lang.String}
-   * <br>
+   * <br>   
    * Database Type: DataType.VARCHAR
+   * 
    */
   public final ColumnBinding<RowBuilder_Project, ProjectGetWhere> title = createTitleBinding();
 
   /**
    * Column Header for Project table.
-   * <p/>
+   * <p>
    * Data Type: {@code java.lang.String}
-   * <br>
+   * <br>   
    * Database Type: DataType.VARCHAR
+   * 
    */
   public final ColumnBinding<RowBuilder_Project, ProjectGetWhere> description = createDescriptionBinding();
 
@@ -79,16 +95,14 @@ public class ProjectTableAdapter
 
   private final ProjectTable _table;
 
-  private final TableParserAdapter<RowBuilder_Project, ProjectGetWhere, ProjectRef> _adapter =
-      new TableAdapter();
+  private final TableParserAdapter<RowBuilder_Project, ProjectGetWhere, ProjectRef> _adapter = new TableAdapter();
 
   /**
    * Allows searching for one or more rows specified by a column value.
    * findWhere assumes that it is used to search for existing rows. An
    * exception will be thrown if no matching row was found. Use {@link
-   * #quietFindWhere}, {@link # getWhere} or
+   * #quietFindWhere}, {@link # getWhere} or 
    * #find to avoid this behavior.
-   *
    * @see #getWhere
    * @see #quietFindWhere
    * @see #find(Closure)
@@ -99,7 +113,6 @@ public class ProjectTableAdapter
   /**
    * Allows searching for one or more rows specified by a column value.
    * quietFindWhere will not throw an exception if no row was found.
-   *
    * @see #getWhere
    * @see #findWhere
    * @see #find(Closure)
@@ -111,7 +124,6 @@ public class ProjectTableAdapter
    * Allows searching for a row specified by a column value.
    * The first matching row is returned. Does not throw an
    * exception, if no element is found.
-   *
    * @see #findWhere
    * @see #quietFindWhere
    * @see #find(Closure)
@@ -136,19 +148,19 @@ public class ProjectTableAdapter
   /**
    * Parses the rows of a Project table. Supported columns are:
    * <ul>
-   * <li><strong>{@code REF}</strong>: {@link ProjectRef}</li>
-   * <li> <strong>{@code id}</strong>: {@code java.lang.Long}
-   * <li> <strong>{@code title}</strong>: {@code java.lang.String}
-   * <li> <strong>{@code description}</strong>: {@code java.lang.String}
+   *   <li><strong>{@code REF}</strong>: {@link ProjectRef}</li>
+   *   <li> <strong>{@code id}</strong>: {@code java.lang.Long}
+   *   <li> <strong>{@code title}</strong>: {@code java.lang.String}
+   *   <li> <strong>{@code description}</strong>: {@code java.lang.String}
    * </ul>
    * The table has to start with a header row, but there can be more
    * headers within one block.
-   * <p/>
+   *
    * <p>Example usage:
    * <pre>
    * projectTable.rows {
    *   REF           | id  | title | description
-   *   ANYPROJECTREF | 123 | "abc" | "abc"
+   *   ANYPROJECTREF | 123 | "abc" | "abc"      
    * }
    * </pre>
    *
@@ -158,14 +170,14 @@ public class ProjectTableAdapter
   {
     TableParser.parseTable(rows, _adapter);
   }
-
-  public int getRowCount()
+  
+  public int getRowCount() 
   {
     return _table.getRowCount();
   }
 
   /**
-   * Clears the table. Simply removes all rows from the table. Does not any magic.
+   * Clears the table. Simply removes all rows from the table. Does not any magic. 
    */
   public void clear()
   {
@@ -251,7 +263,6 @@ public class ProjectTableAdapter
 
   /**
    * Remove a row from the builder
-   *
    * @return the deleted row itself
    */
   public RowBuilder_Project deleteRow(RowBuilder_Project rowToDelete)
@@ -269,7 +280,6 @@ public class ProjectTableAdapter
 
   /**
    * Delivers a collection of rows matching to a filter.
-   *
    * @param filter The used filter
    * @return The collection of rows, may return an empty list
    * @see #find(Closure)
@@ -283,7 +293,6 @@ public class ProjectTableAdapter
 
   /**
    * Delivers a collection of rows matching to a filter.
-   *
    * @param filter A Groovy Closure with an argument of type RowBuilder_Project, returning a boolean
    * @return The collection of rows, may return an empty list
    * @see #find(Filter)
@@ -294,13 +303,13 @@ public class ProjectTableAdapter
   {
     final Closure<Boolean> localFilter = filter;
     return _table.find(new Filter<RowBuilder_Project>()
-    {
-      @Override
-      public boolean accept(RowBuilder_Project row)
       {
-        return localFilter.call(row);
-      }
-    });
+        @Override
+        public boolean accept(RowBuilder_Project row)
+        {
+          return localFilter.call(row);
+        }
+      });
   }
 
   public void foreach(Action<RowBuilder_Project> action)
@@ -312,13 +321,13 @@ public class ProjectTableAdapter
   {
     final Closure<?> localAction = action;
     _table.foreach(new Action<RowBuilder_Project>()
-    {
-      @Override
-      public void call(RowBuilder_Project row)
       {
-        localAction.call(row);
-      }
-    });
+        @Override
+        public void call(RowBuilder_Project row)
+        {
+          localAction.call(row);
+        }
+      });
   }
 
   public List<RowBuilder_Project> getRows()
@@ -329,11 +338,11 @@ public class ProjectTableAdapter
   private class TableAdapter implements TableParserAdapter<RowBuilder_Project, ProjectGetWhere, ProjectRef>
   {
     @Override
-    public RowBuilder_Project insertRow()
+    public RowBuilder_Project insertRow() 
     {
       return _table.insertRow();
     }
-
+  
     @Override
     public ProjectGetWhere getWhere()
     {
@@ -363,33 +372,30 @@ public class ProjectTableAdapter
     {
       return "Project";
     }
+    
+  };
 
-  }
 
-  ;
-
-  private ColumnBinding<RowBuilder_Project, ProjectGetWhere> createIdBinding()
+  private ColumnBinding<RowBuilder_Project, ProjectGetWhere> createIdBinding() 
   {
     return new ColumnBinding<RowBuilder_Project, ProjectGetWhere>()
     {
       @Override
       public void set(RowBuilder_Project row, Object value)
       {
-        if (valueMustBeSetRaw(value))
+        if (valueMustBeSetRaw(value)) 
         {
           row.setIdRaw(value);
-        }
-        else
-        {
+        } else {
           Object castedValue = CastUtil.cast(value, DataType.BIGINT);
-          row.setId((java.lang.Long) castedValue);
+          row.setId((java.lang.Long)castedValue);
         }
       }
 
       @Override
       public Optional<RowBuilder_Project> getWhere(ProjectGetWhere getWhere, Object value)
       {
-        return getWhere.id((java.lang.Long) CastUtil.cast(value, DataType.BIGINT));
+        return getWhere.id((java.lang.Long)CastUtil.cast(value, DataType.BIGINT));
       }
 
       @Override
@@ -397,7 +403,7 @@ public class ProjectTableAdapter
       {
         return true;
       }
-
+      
       @Override
       public DataType getDataType()
       {
@@ -407,24 +413,22 @@ public class ProjectTableAdapter
     };
   }
 
-  private ColumnBinding<RowBuilder_Project, ProjectGetWhere> createTitleBinding()
+  private ColumnBinding<RowBuilder_Project, ProjectGetWhere> createTitleBinding() 
   {
     return new ColumnBinding<RowBuilder_Project, ProjectGetWhere>()
     {
       @Override
       public void set(RowBuilder_Project row, Object value)
       {
-        if (valueMustBeSetRaw(value))
+        if (valueMustBeSetRaw(value)) 
         {
           row.setTitleRaw(value);
-        }
-        else
-        {
+        } else {
           Object castedValue = CastUtil.cast(value, DataType.VARCHAR);
-          row.setTitle((java.lang.String) castedValue);
+          row.setTitle((java.lang.String)castedValue);
         }
       }
-
+      
       @Override
       public DataType getDataType()
       {
@@ -434,24 +438,22 @@ public class ProjectTableAdapter
     };
   }
 
-  private ColumnBinding<RowBuilder_Project, ProjectGetWhere> createDescriptionBinding()
+  private ColumnBinding<RowBuilder_Project, ProjectGetWhere> createDescriptionBinding() 
   {
     return new ColumnBinding<RowBuilder_Project, ProjectGetWhere>()
     {
       @Override
       public void set(RowBuilder_Project row, Object value)
       {
-        if (valueMustBeSetRaw(value))
+        if (valueMustBeSetRaw(value)) 
         {
           row.setDescriptionRaw(value);
-        }
-        else
-        {
+        } else {
           Object castedValue = CastUtil.cast(value, DataType.VARCHAR);
-          row.setDescription((java.lang.String) castedValue);
+          row.setDescription((java.lang.String)castedValue);
         }
       }
-
+      
       @Override
       public DataType getDataType()
       {
@@ -463,9 +465,9 @@ public class ProjectTableAdapter
 
   private boolean valueMustBeSetRaw(Object value)
   {
-    return (value instanceof DatabaseRef) ||
-        (value instanceof Future<?>) ||
-        (value instanceof IDataSetModifier);
+    return (value instanceof DatabaseRef) || 
+           (value instanceof Future<?>) ||
+           (value instanceof IDataSetModifier);
   }
 
 }
